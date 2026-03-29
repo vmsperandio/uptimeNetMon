@@ -44,16 +44,68 @@ Aplicativo Python + Streamlit para monitoramento de disponibilidade de equipamen
    - Em alguns casos, funciona sem privilégios elevados
    - Se não funcionar, execute como administrador
 
-## 🚀 Instalação
+## 🚀 Instalação e Início Rápido
 
-### 1. Clone ou baixe o repositório
+> 💡 **Recomendado para iniciantes:** siga os passos abaixo em ordem.
 
-```bash
-git clone <url-do-repositorio>
-cd PingTest
+---
+
+### Passo 1 — Instale o Python
+
+Baixe e instale o **Python Manager** clicando no link abaixo:
+
+👉 [python-manager-26.0.msix](https://www.python.org/ftp/python/pymanager/python-manager-26.0.msix)
+
+- Após o download, abra o arquivo `.msix` e siga o assistente de instalação.
+- Ao final, o Python estará disponível no seu sistema.
+
+> ⚠️ Se o Windows perguntar sobre permissões, clique em **"Instalar"** e confirme.
+
+---
+
+### Passo 2 — Instale o Streamlit
+
+1. Abra o **CMD** (Prompt de Comando):
+   - Pressione `Win + R`, digite `cmd` e pressione **Enter**
+2. No CMD, digite o comando abaixo e pressione **Enter**:
+
+```cmd
+python -m pip install streamlit
 ```
 
-### 2. Instale as dependências
+3. Aguarde a instalação finalizar completamente.
+4. **Feche o CMD.**
+
+---
+
+### Passo 3 — Instale o PyAutoGUI
+
+1. Abra um **novo CMD** (feche e reabra para garantir que as variáveis de ambiente estejam atualizadas).
+2. Digite o comando abaixo e pressione **Enter**:
+
+```cmd
+python -m pip install pyautogui
+```
+
+3. Aguarde a instalação finalizar completamente.
+
+---
+
+### Passo 4 — Execute o Aplicativo
+
+Após finalizar as instalações:
+
+1. Navegue até a pasta onde você baixou/extraiu os arquivos do **PingTest**.
+2. Dê um **duplo clique** no arquivo **`start_app.bat`**.
+3. O aplicativo abrirá automaticamente no seu navegador padrão em `http://localhost:8501` 🎉
+
+> ⚠️ Não feche a janela do CMD que abrir junto com o aplicativo — ela mantém o servidor em execução.
+
+---
+
+### Instalação via linha de comando (avançado)
+
+Se preferir instalar todas as dependências de uma vez:
 
 ```bash
 pip install -r requirements.txt
@@ -68,6 +120,10 @@ pip install -r requirements.txt
 ## 🎮 Como Usar
 
 ### Executar o aplicativo
+
+**Método recomendado:** dê um duplo clique no arquivo **`start_app.bat`** na pasta do projeto.
+
+Alternativamente, via terminal:
 
 ```bash
 streamlit run app.py
