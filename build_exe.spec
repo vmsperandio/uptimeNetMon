@@ -28,6 +28,8 @@ hiddenimports = [
     'semver',
     'gitdb',
     'smmap',
+    'importlib.metadata',
+    'importlib_metadata',
 ]
 
 # Dados adicionais necessários (Streamlit precisa de seus arquivos estáticos)
@@ -36,11 +38,24 @@ datas = []
 # Tentar encontrar diretório de instalação do Streamlit
 try:
     import streamlit as st
+    from importlib.metadata import distribution
+    
     st_path = Path(st.__file__).parent
     
     # Adicionar static files do Streamlit
     datas.append((str(st_path / 'static'), 'streamlit/static'))
     datas.append((str(st_path / 'runtime'), 'streamlit/runtime'))
+    
+    # Adicionar metadados dos pacotes (crítico para evitar PackageNotFoundError)
+    for pkg in ['streamlit', 'altair', 'pandas', 'numpy', 'pyarrow', 'pillow', 
+                'click', 'protobuf', 'tornado', 'watchdog', 'gitpython', 'pydeck']:
+        try:
+            dist = distribution(pkg)
+            if dist._path:
+                datas.append((str(dist._path), f'{dist.name}-{dist.version}.dist-info'))
+        except Exception:
+            pass
+            
 except ImportError:
     print("Aviso: Streamlit não encontrado. Instale com: pip install streamlit")
 
@@ -69,16 +84,21 @@ a = Analysis(
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
+# Executável único (onefile) para distribuição
 exe = EXE(
     pyz,
     a.scripts,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
     [],
-    exclude_binaries=True,
     name=app_name,
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
+    upx_exclude=[],
+    runtime_tmpdir=None,
     console=True,  # Manter console para ver logs do Streamlit
     disable_windowed_traceback=False,
     argv_emulation=False,
@@ -87,32 +107,3 @@ exe = EXE(
     entitlements_file=None,
     icon=None,  # Adicione um ícone .ico aqui se desejar
 )
-
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    name=app_name,
-)
-
-# Nota: Para criar um executável de arquivo único, use:
-# exe = EXE(
-#     pyz,
-#     a.scripts,
-#     a.binaries,
-#     a.zipfiles,
-#     a.datas,
-#     [],
-#     name=app_name,
-#     debug=False,
-#     bootloader_ignore_signals=False,
-#     strip=False,
-#     upx=True,
-#     upx_exclude=[],
-#     runtime_tmpdir=None,
-#     console=True,
-# )
